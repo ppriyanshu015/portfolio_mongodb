@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Resume and portfolio of <%= resume.personalInfo.fullName %>">
+  <title><%= pageTitle %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include("partials/header", { resume }) %>
+  <main>
+    <section class="hero section" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> PERSONAL RESUME &amp; PORTFOLIO</p>
+          <h1>Hello, I'm<br><span><%= resume.personalInfo.fullName %>.</span></h1>
+          <h2><%= resume.personalInfo.title %></h2>
+          <p class="hero-description"><%= resume.personalInfo.summary %></p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#contact">Get in touch <span>↗</span></a>
+            <a class="button button-secondary" href="/resume.pdf" download>Download CV ↓</a>
+          </div>
+          <div class="quick-info">
+            <% if (resume.personalInfo.location) { %><span>⌖ <%= resume.personalInfo.location %></span><% } %>
+            <% if (resume.personalInfo.email) { %><a href="mailto:<%= resume.personalInfo.email %>">✉ <%= resume.personalInfo.email %></a><% } %>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Profile initials illustration">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="profile-card">
+            <div class="profile-top"><span></span><span></span><span></span></div>
+            <div class="avatar"><%= resume.personalInfo.initials || resume.personalInfo.fullName.split(" ").map(word => word[0]).join("").slice(0, 2) %></div>
+            <p class="profile-name"><%= resume.personalInfo.fullName %></p>
+            <p class="profile-role">Curious mind. Continuous learner.</p>
+            <div class="profile-tags"><span>Code</span><span>Learn</span><span>Create</span></div>
+          </div>
+          <div class="floating-chip chip-code">⌘ &nbsp; Developer mindset</div>
+          <div class="floating-chip chip-learning">✦ &nbsp; Always learning</div>
+          <div class="hero-glow"></div>
+        </div>
+      </div>
+      <div class="hero-bottom container"><span>SCROLL TO EXPLORE</span><span class="scroll-line"></span></div>
+    </section>
+
+    <section class="section section-light" id="about">
+      <div class="container two-column">
+        <div><p class="eyebrow">01 / ABOUT ME</p><h2 class="section-title">A little about<br><span>who I am.</span></h2></div>
+        <div class="about-content">
+          <p class="lead"><%= resume.personalInfo.summary %></p>
+          <div class="focus-box"><span class="focus-icon">✳</span><div><strong>My approach</strong><p>Stay curious, keep learning and turn ideas into practical work.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="education">
+      <div class="container">
+        <p class="eyebrow">02 / ACADEMIC BACKGROUND</p>
+        <div class="section-heading-row"><h2 class="section-title">My <span>education.</span></h2><p class="section-note">Academic qualifications retrieved from the resume database.</p></div>
+        <div class="timeline">
+          <% if (resume.education && resume.education.length) { %>
+            <% resume.education.forEach((item, index) => { %>
+              <article class="timeline-item">
+                <div class="timeline-marker"><%= String(index + 1).padStart(2, "0") %></div>
+                <div class="timeline-card">
+                  <div class="timeline-top"><span class="tag"><%= item.period || item.status %></span><span class="timeline-index">EDUCATION</span></div>
+                  <h3><%= item.degree %><% if (item.specialization) { %> — <%= item.specialization %><% } %></h3>
+                  <p class="institution"><%= item.institution %></p>
+                  <% if (item.result) { %><p class="result"><%= item.result %></p><% } %>
+                </div>
+              </article>
+            <% }) %>
+          <% } else { %><p class="empty-state">Education details have not been added yet.</p><% } %>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-light" id="skills">
+      <div class="container">
+        <p class="eyebrow">03 / WHAT I BRING</p>
+        <div class="section-heading-row"><h2 class="section-title">Skills &amp; <span>strengths.</span></h2><p class="section-note">Skills are read directly from MongoDB.</p></div>
+        <div class="skills-grid">
+          <div class="skill-panel">
+            <div class="panel-heading"><span class="panel-icon">&lt;/&gt;</span><div><h3>Technical skills</h3><p>Programming &amp; web fundamentals</p></div></div>
+            <div class="skill-list">
+              <% (resume.technicalSkills || []).forEach(skill => { %><span class="skill-pill"><i></i><%= skill %></span><% }) %>
+              <% if (!resume.technicalSkills || !resume.technicalSkills.length) { %><p class="muted">No technical skills added yet.</p><% } %>
+            </div>
+          </div>
+          <div class="skill-panel">
+            <div class="panel-heading"><span class="panel-icon">✧</span><div><h3>Soft skills</h3><p>How I approach my work</p></div></div>
+            <div class="soft-list">
+              <% (resume.softSkills || []).forEach((skill, index) => { %><div><span><%= String(index + 1).padStart(2, "0") %></span><strong><%= skill %></strong></div><% }) %>
+              <% if (!resume.softSkills || !resume.softSkills.length) { %><p class="muted">No soft skills added yet.</p><% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="interests">
+      <div class="container">
+        <p class="eyebrow">04 / BEYOND THE SCREEN</p>
+        <div class="section-heading-row"><h2 class="section-title">Interests &amp; <span>languages.</span></h2></div>
+        <div class="interests-grid">
+          <div class="interest-panel"><h3>Things I enjoy</h3><div class="interest-tags"><% (resume.interests || []).forEach(item => { %><span><%= item %></span><% }) %></div></div>
+          <div class="interest-panel language-panel"><h3>Languages</h3><% (resume.languages || []).forEach(lang => { %><div class="language-row"><span><%= lang %></span><span class="language-label">Language</span></div><% }) %></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="container contact-card">
+        <p class="eyebrow">05 / LET'S CONNECT</p><h2>Have an idea or<br><span>an opportunity?</span></h2>
+        <p class="contact-intro">I'd be glad to connect, learn and explore possibilities together.</p>
+        <div class="contact-links">
+          <% if (resume.personalInfo.email) { %><a class="button button-primary" href="mailto:<%= resume.personalInfo.email %>">Send me an email ↗</a><a class="contact-detail" href="mailto:<%= resume.personalInfo.email %>"><span>EMAIL</span><strong><%= resume.personalInfo.email %></strong></a><% } %>
+          <% if (resume.personalInfo.phone) { %><a class="contact-detail" href="tel:<%= resume.personalInfo.phone.replace(/\s/g, "") %>"><span>PHONE</span><strong><%= resume.personalInfo.phone %></strong></a><% } %>
+        </div>
+      </div>
+    </section>
+  </main>
+  <%- include("partials/footer", { resume }) %>
+  <script src="/js/main.js"></script>
+</body>
+</html>
